@@ -6,6 +6,7 @@ services:
     container_name: kafka
     ports:
       - 9092:9092
+      - 2181:2181
     environment:
       - "ADVERTISED_HOST=0.0.0.0"
       #OPÇÃO 2# - "ADV_HOST=0.0.0.0"
