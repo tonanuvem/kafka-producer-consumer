@@ -1,0 +1,45 @@
+version: '3'
+services:
+  kafka:
+    image: spotify/kafka
+    #OPÇÃO 2# image: landoop/fast-data-dev
+    container_name: kafka
+    ports:
+      - 9092:9092
+    environment:
+      - "ADVERTISED_HOST=0.0.0.0"
+      #OPÇÃO 2# - "ADV_HOST=0.0.0.0"
+      - "ADVERTISED_PORT=9092"
+    networks:
+      - kafka_net
+
+  producer:
+    image: tonanuvem/64aoj_producer_kafka:latest
+    container_name: producer
+    ports:
+      - 80:5001
+    environment:
+      #- "HOST=0.0.0.0"
+      - "HOST=kafka"
+      - "PORTA=9092"
+      - "TOPICO=meu-topico"
+    networks:
+      - kafka_net
+    depends_on:
+      - kafka
+
+  consumer:
+    image: tonanuvem/64aoj_consumer_kafka:latest
+    container_name: consumer
+    environment:
+      #- "HOST=0.0.0.0"
+      - "HOST=kafka"
+      - "PORTA=9092"
+      - "TOPICO=meu-topico"
+    networks:
+      - kafka_net
+    depends_on:
+      - kafka
+      
+networks:
+  kafka_net:
