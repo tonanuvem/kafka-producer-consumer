@@ -4,6 +4,7 @@ services:
     image: spotify/kafka
     #OPÇÃO 2# image: landoop/fast-data-dev
     container_name: kafka
+    network_mode: "host"
     ports:
       - 9092:9092
       - 2181:2181
@@ -11,36 +12,39 @@ services:
       - "ADVERTISED_HOST=kafka"
       #OPÇÃO 2# - "ADV_HOST=0.0.0.0"
       - "ADVERTISED_PORT=9092"
-    networks:
-      - kafka_net
+    #networks:
+    #  - kafka_net
 
   producer:
     image: tonanuvem/64aoj_producer_kafka:latest
     container_name: producer
+    network_mode: "host"
     ports:
       - 80:5001
+      - 5001:5001
     environment:
       #- "HOST=0.0.0.0"
       - "HOST=kafka"
       - "PORTA=9092"
       - "TOPICO=meu-topico"
-    networks:
-      - kafka_net
+    #networks:
+    #  - kafka_net
     depends_on:
       - kafka
 
   consumer:
     image: tonanuvem/64aoj_consumer_kafka:latest
     container_name: consumer
+    network_mode: "host"
     environment:
       #- "HOST=0.0.0.0"
       - "HOST=kafka"
       - "PORTA=9092"
       - "TOPICO=meu-topico"
-    networks:
-      - kafka_net
+    #networks:
+    #  - kafka_net
     depends_on:
       - kafka
       
-networks:
-  kafka_net:
+#networks:
+#  kafka_net:
