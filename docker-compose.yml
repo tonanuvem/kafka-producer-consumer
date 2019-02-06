@@ -65,7 +65,7 @@ services:
     depends_on:
       - kafka
       - producer
-    command: /bin/sh -c 'sleep 15'
+    command: /bin/sh -c 'sleep 15s'
       
 #networks:
 #  kafka_net:
