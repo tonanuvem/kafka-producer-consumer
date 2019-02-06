@@ -37,7 +37,7 @@ services:
     command: >
       /bin/sh -c "
         echo Waiting for kafka service start...;
-        while ! nc -z kafka 9092;
+        while ! nc -z 0.0.0.0 9092;
         do
           sleep 1;
         done;
