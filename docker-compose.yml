@@ -45,6 +45,7 @@ services:
     #  - kafka_net
     depends_on:
       - kafka
+      - producer
       
 #networks:
 #  kafka_net:
