@@ -24,14 +24,25 @@ services:
       - 5001:5001
     restart: on-failure
     environment:
-      #- "HOST=0.0.0.0"
-      - "HOST=kafka"
+      - "HOST=0.0.0.0"
+      #- "HOST=kafka"
       - "PORTA=9092"
       - "TOPICO=meu-topico"
     #networks:
     #  - kafka_net
     depends_on:
       - kafka
+    links:
+      - kafka
+    command: >
+      /bin/sh -c "
+        echo Waiting for kafka service start...;
+        while ! nc -z kafka 9092;
+        do
+          sleep 1;
+        done;
+        echo Connected!;
+      "
 
   consumer:
     image: tonanuvem/64aoj_consumer_kafka:latest
