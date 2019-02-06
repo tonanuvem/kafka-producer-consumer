@@ -34,11 +34,12 @@ services:
       - kafka
     #links:
     #  - kafka
-    healthcheck:
-        test: ["CMD", "nc", "-z", "http://0.0.0.0:9092"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
+    #healthcheck:
+    #    test: ["CMD", "nc", "-z", "http://0.0.0.0:9092"]
+    #    interval: 30s
+    #    timeout: 10s
+    #    retries: 5
+    command: bash -c "for i in {1..100} ; do if ! curl -s 0.0.0.0:9092 > /dev/null ; then echo waiting on kafka for $i seconds; sleep $i; fi; done; echo Connected!;"
     #command: >
     #  /bin/sh -c "
     #    echo Waiting for kafka service start...;
