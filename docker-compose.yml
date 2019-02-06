@@ -34,6 +34,11 @@ services:
       - kafka
     #links:
     #  - kafka
+    healthcheck:
+        test: ["CMD", "nc", "-z", "http://0.0.0.0:9092"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
     #command: >
     #  /bin/sh -c "
     #    echo Waiting for kafka service start...;
