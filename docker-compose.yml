@@ -9,8 +9,8 @@ services:
       - 9092:9092
       - 2181:2181
     environment:
-      #- "ADVERTISED_HOST=kafka"
-      - "ADV_HOST=0.0.0.0"
+      - "ADVERTISED_HOST=0.0.0.0"
+      #- "ADV_HOST=0.0.0.0"
       - "ADVERTISED_PORT=9092"
     #networks:
     #  - kafka_net
