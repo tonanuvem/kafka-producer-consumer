@@ -39,7 +39,7 @@ services:
     #    interval: 30s
     #    timeout: 10s
     #    retries: 5
-    command: /bin/sh -c 'while sleep 8; do :; done'
+    command: /bin/sh -c 'sleep 10'
     # command: /bin/sh -c "for i in {1..100} ; do if ! nc -z 0.0.0.0:9092 > /dev/null ; then echo waiting on kafka for $i seconds; sleep $i; fi; done; echo Connected!;"
     #command: >
     #  /bin/sh -c "
@@ -65,7 +65,7 @@ services:
     depends_on:
       - kafka
       - producer
-    command: /bin/sh -c 'while sleep 15; do :; done'
+    command: /bin/sh -c 'sleep 15'
       
 #networks:
 #  kafka_net:
