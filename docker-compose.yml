@@ -32,8 +32,8 @@ services:
     #  - kafka_net
     depends_on:
       - kafka
-    links:
-      - kafka
+    #links:
+    #  - kafka
     command: >
       /bin/sh -c "
         echo Waiting for kafka service start...;
