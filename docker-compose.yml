@@ -16,7 +16,7 @@ services:
     #  - kafka_net
 
   producer:
-    image: tonanuvem/64aoj_producer_kafka:latest
+    image: tonanuvem/producer_kafka:latest
     container_name: producer
     network_mode: "host"
     ports:
@@ -52,7 +52,7 @@ services:
     #  "
 
   consumer:
-    image: tonanuvem/64aoj_consumer_kafka:latest
+    image: tonanuvem/consumer_kafka:latest
     container_name: consumer
     network_mode: "host"
     environment:
