@@ -10,10 +10,11 @@
 
 >  Kafka:
     - spotify/kafka (opção leve: kafka + zookeper)
-    - landoop/fast-data-dev (opção completa:  Kafka, Registry, Connect, Landoop, Stream-Reactor, KCQL )
 
->  Producer:
-    - tonanuvem/64aoj_producer_kafka:latest (python api)
+>  Producer: (PYTHON)
+    - https://github.com/tonanuvem/kafka-producer-microservice/
+    - tonanuvem/producer_kafka:latest (python api)
 
->  Consumer:
-    - tonanuvem/64aoj_consumer_kafka:latest (node js consumer que publica as mensagens no Slack AOJ)
+>  Consumer: (NODE JS)
+    - https://github.com/tonanuvem/kafka-consumer-microservice/
+    - tonanuvem/consumer_kafka:latest (node js consumer)
