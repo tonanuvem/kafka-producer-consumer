@@ -55,6 +55,7 @@ services:
     image: tonanuvem/consumer_kafka:latest
     container_name: consumer
     network_mode: "host"
+    restart: on-failure
     environment:
       #- "HOST=0.0.0.0"
       - "HOST=kafka"
