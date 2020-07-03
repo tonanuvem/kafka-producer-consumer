@@ -41,6 +41,7 @@ services:
       - "PORTA=9092"
       - "TOPICO=meu-topico"
       - "SLACK=inserir-webhook"
+      - "CANAL=lab-produtor"
     #networks:
     #  - kafka_net
     depends_on:
@@ -75,6 +76,7 @@ services:
       - "PORTA=9092"
       - "TOPICO=meu-topico"
       - "SLACK=inserir-webhook"
+      - "CANAL=lab-consumidor"
     #networks:
     #  - kafka_net
     depends_on:
