@@ -2,7 +2,6 @@ version: '3'
 services:
   kafka:
     image: spotify/kafka
-    #OPÇÃO 2# image: landoop/fast-data-dev
     container_name: kafka
     network_mode: "host"
     ports:
@@ -28,6 +27,7 @@ services:
       #- "HOST=kafka"
       - "PORTA=9092"
       - "TOPICO=meu-topico"
+      - "SLACK=inserir-webhook"
     #networks:
     #  - kafka_net
     depends_on:
@@ -61,12 +61,25 @@ services:
       - "HOST=kafka"
       - "PORTA=9092"
       - "TOPICO=meu-topico"
+      - "SLACK=inserir-webhook"
     #networks:
     #  - kafka_net
     depends_on:
       - kafka
       - producer
     # command: /bin/sh -c 'sleep 15s'
-      
+
+  kafkamanager:
+    image: kafkamanager/kafka-manager
+    container_name: kafkamanager
+    network_mode: "host"
+    restart: on-failure
+    environment:
+      - "ZK_HOSTS=kafka"
+    #networks:
+    #  - kafka_net
+    depends_on:
+      - kafka
+
 #networks:
 #  kafka_net:
