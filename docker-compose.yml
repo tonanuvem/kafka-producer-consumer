@@ -9,6 +9,7 @@ services:
       - 9092:9092
       - 2181:2181
     command:
+# https://kafka.apache.org/quickstart
       - sed -i 's|broker.id=.*|broker.id=1|' /opt/kafka_2.11-0.10.1.0/config/server.properties
 # >cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep broker.id
 # broker.id=0
