@@ -2,6 +2,7 @@ version: '3'
 services:
   kafka:
     image: spotify/kafka
+# exemplo de cluster: https://github.com/zoidbergwill/docker-compose-kafka/blob/master/docker-compose.yml
     container_name: kafka
     network_mode: "host"
     ports:
