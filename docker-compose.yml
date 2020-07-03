@@ -7,6 +7,14 @@ services:
     ports:
       - 9092:9092
       - 2181:2181
+#    command:
+# root@node2:/# cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep broker.id
+# broker.id=0
+# root@node2:/# cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep listeners=
+# #listeners=PLAINTEXT://:9092
+# #advertised.listeners=PLAINTEXT://your.host.name:9092
+# root@node2:/# cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep log.dirs
+# log.dirs=/tmp/kafka-logs
     environment:
       - "ADVERTISED_HOST=0.0.0.0"
       #- "ADV_HOST=0.0.0.0"
