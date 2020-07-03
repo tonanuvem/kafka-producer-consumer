@@ -9,17 +9,20 @@ services:
       - 9092:9092
       - 2181:2181
     command:
-# https://kafka.apache.org/quickstart
-      - sed -i 's|broker.id=.*|broker.id=1|' /opt/kafka_2.11-0.10.1.0/config/server.properties
+      # https://kafka.apache.org/quickstart
+      - bash
+      - -c
+      - |
+        sed -i 's|broker.id=.*|broker.id=1|' /opt/kafka_2.11-0.10.1.0/config/server.properties
 # >cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep broker.id
 # broker.id=0
-      - sed -i 's|#listeners=PLAINTEXT.*|listeners=PLAINTEXT://:9093|' /opt/kafka_2.11-0.10.1.0/config/server.properties
+        sed -i 's|#listeners=PLAINTEXT.*|listeners=PLAINTEXT://:9093|' /opt/kafka_2.11-0.10.1.0/config/server.properties
 # >cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep listeners=
 # #listeners=PLAINTEXT://:9092
 # #advertised.listeners=PLAINTEXT://your.host.name:9092
 # >cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep log.dirs
 # log.dirs=/tmp/kafka-logs
-      - /opt/kafka_2.11-0.10.1.0/bin/kafka-server-start.sh /opt/kafka_2.11-0.10.1.0/config/server.properties &
+        /opt/kafka_2.11-0.10.1.0/bin/kafka-server-start.sh /opt/kafka_2.11-0.10.1.0/config/server.properties &
     environment:
       - "ADVERTISED_HOST=0.0.0.0"
       #- "ADV_HOST=0.0.0.0"
