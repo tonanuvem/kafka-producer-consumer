@@ -23,15 +23,49 @@ services:
         - |
           sed -i 's|broker.id=.*|broker.id=1|' /opt/kafka_2.11-0.10.1.0/config/server.properties
           cat /opt/kafka_2.11-0.10.1.0/config/server.properties | grep broker.id
-          sed -i 's|#listeners=PLAINTEXT.*|listeners=PLAINTEXT://:9093|' /opt/kafka_2.11-0.10.1.0/config/server.properties
+          sed -i 's|#listeners=PLAINTEXT.*|listeners=PLAINTEXT://:9092|' /opt/kafka_2.11-0.10.1.0/config/server.properties
           cat /opt/kafka_2.11-0.10.1.0/config/server.properties | grep listeners=
-          sh /opt/kafka_2.11-0.10.1.0/bin/kafka-server-start.sh /opt/kafka_2.11-0.10.1.0/config/server.properties
+          supervisord -n # exemplo Dockerfile: https://github.com/tonanuvem/kafka-producer-microservice/blob/master/Dockerfile
     environment:
       - "ADVERTISED_HOST=0.0.0.0"
       #- "ADV_HOST=0.0.0.0"
       - "ADVERTISED_PORT=9092"
     #networks:
     #  - kafka_net
+
+  kafka2:
+    image: spotify/kafka
+# exemplo de cluster: https://github.com/zoidbergwill/docker-compose-kafka/blob/master/docker-compose.yml
+    container_name: kafka2
+    network_mode: "host"
+    ports:
+      - 9093:9092
+      - 2182:2181
+      # https://kafka.apache.org/quickstart
+      # >cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep broker.id
+      # broker.id=0
+      # >cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep listeners=
+      # #listeners=PLAINTEXT://:9092
+      # #advertised.listeners=PLAINTEXT://your.host.name:9092
+      # >cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep log.dirs
+      # log.dirs=/tmp/kafka-logs
+      #          ./opt/kafka_2.11-0.10.1.0
+    command:
+        - bash
+        - -c
+        - |
+          sed -i 's|broker.id=.*|broker.id=2|' /opt/kafka_2.11-0.10.1.0/config/server.properties
+          cat /opt/kafka_2.11-0.10.1.0/config/server.properties | grep broker.id
+          sed -i 's|#listeners=PLAINTEXT.*|listeners=PLAINTEXT://:9093|' /opt/kafka_2.11-0.10.1.0/config/server.properties
+          cat /opt/kafka_2.11-0.10.1.0/config/server.properties | grep listeners=
+          supervisord -n # https://github.com/tonanuvem/kafka-producer-microservice/blob/master/Dockerfile
+    environment:
+      - "ADVERTISED_HOST=0.0.0.0"
+      #- "ADV_HOST=0.0.0.0"
+      - "ADVERTISED_PORT=9093"
+    #networks:
+    #  - kafka_net
+
 
   producer:
     image: tonanuvem/producer_kafka:latest
