@@ -82,14 +82,14 @@ services:
       - "2888"
       - "3888"
 
-  kafkamanager:
+  kafkamanager: # https://github.com/yahoo/CMAK
     image: kafkamanager/kafka-manager
     container_name: kafkamanager
     ports:
       - 9000:9000
     restart: on-failure
     environment:
-      - "ZK_HOSTS=kafka1"
+      - "ZK_HOSTS=zoo1:2181,zoo2:2182,zoo3:2183"
     depends_on:
       - kafka1
       - kafka2
