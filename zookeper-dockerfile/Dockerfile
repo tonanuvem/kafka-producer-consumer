@@ -11,9 +11,9 @@ wget -q https://www.apache.org/dist/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apa
 wget -q https://www.apache.org/dist/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz.sha512
 
 #Verify download
-RUN sha512sum -c apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz.sha512 && \
-gpg --import KEYS && \
-gpg --verify apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz.asc
+#RUN sha512sum -c apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz.sha512 && \
+#gpg --import KEYS && \
+#gpg --verify apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz.asc
 
 #Install
 RUN tar -xzf apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz -C /opt && \
