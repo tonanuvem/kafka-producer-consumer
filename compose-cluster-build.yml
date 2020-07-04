@@ -13,7 +13,8 @@ services:
   kafka: # https://github.com/wurstmeister/kafka-docker/wiki/Connectivity
     image: wurstmeister/kafka:latest
     #build: ./kafka-Dockerfile
-    replicas: 3
+    deploy:
+      replicas: 3
     ports:
       - "9092"
     networks:
