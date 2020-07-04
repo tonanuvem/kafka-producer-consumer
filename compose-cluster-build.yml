@@ -5,6 +5,7 @@ services:
     build: 
       context: .
       dockerfile: ./zookeper-dockerfile/Dockerfile
+    container_name: zookeper
     networks:
       - kafka_net 
     ports:
@@ -12,6 +13,7 @@ services:
       
   kafka: # https://github.com/wurstmeister/kafka-docker/wiki/Connectivity
     image: wurstmeister/kafka:latest
+    container_name: kafka
     #build: ./kafka-Dockerfile
     deploy:
       replicas: 3
