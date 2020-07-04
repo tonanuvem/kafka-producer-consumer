@@ -82,3 +82,5 @@ services:
 
 networks:
   kafka_net:
+  
+# docker-compose down && git pull && docker-compose -f compose-cluster-build.yml up
