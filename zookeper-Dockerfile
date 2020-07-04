@@ -26,4 +26,6 @@ EXPOSE 2181 2888 3888
 WORKDIR /opt/apache-zookeeper-${ZOOKEEPER_VERSION}
 VOLUME ["/opt/apache-zookeeper-${ZOOKEEPER_VERSION}/conf", "/opt/apache-zookeeper-${ZOOKEEPER_VERSION}/data"]
 
-CMD /bin/sh /opt/apache-zookeeper-3.5.8/bin/zkServer.sh start-foreground
+RUN apk update && apk upgrade && apk add bash
+
+CMD bash /opt/apache-zookeeper-3.5.8/bin/zkServer.sh start-foreground
