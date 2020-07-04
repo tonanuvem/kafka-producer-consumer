@@ -1,14 +1,17 @@
-version: '2'
+version: '3'
 services:
-  zookeeper:
+
+  zookeeper: # https://github.com/wurstmeister/zookeeper-docker
     build: 
       context: .
       dockerfile: ./zookeper-dockerfile/Dockerfile
     ports:
       - "2181:2181"
-  kafka:
+      
+  kafka: # https://github.com/wurstmeister/kafka-docker/wiki/Connectivity
     image: wurstmeister/kafka:latest
     #build: ./kafka-Dockerfile
+    replicas: 3
     ports:
       - "9092"
     environment:
@@ -16,14 +19,50 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-
+      
   kafkamanager:
     image: kafkamanager/kafka-manager
     container_name: kafkamanager
     restart: on-failure
+    # curl localhost:9000/clusters --data "name=fiap&zkHosts=0.0.0.0:2181&kafkaVersion=2.6.1" -X POST
     ports:
       - 9000:9000
     environment:
       - "ZK_HOSTS=0.0.0.0:2181"
     depends_on:
       - kafka
+
+  producer:
+    image: tonanuvem/producer_kafka:latest
+    container_name: producer
+    network_mode: "host"
+    ports:
+      - 80:5001
+      - 5001:5001
+    restart: on-failure
+    environment:
+      - "HOST=0.0.0.0"
+      #- "HOST=kafka"
+      - "PORTA=9092"
+      - "TOPICO=meu-topico"
+      - "SLACK=inserir-webhook"
+      - "CANAL=lab-produtor"
+    depends_on:
+      - kafka
+
+  consumer:
+    image: tonanuvem/consumer_kafka:latest
+    container_name: consumer
+    network_mode: "host"
+    restart: on-failure
+    environment:
+      - "HOST=0.0.0.0"
+      #- "HOST=kafka"
+      - "PORTA=9092"
+      - "TOPICO=meu-topico"
+      - "SLACK=inserir-webhook"
+      - "CANAL=lab-consumidor"
+    depends_on:
+      - kafka
+      - producer
+
