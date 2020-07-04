@@ -5,6 +5,8 @@ services:
     build: 
       context: .
       dockerfile: ./zookeper-dockerfile/Dockerfile
+    networks:
+      - kafka_net 
     ports:
       - "2181:2181"
       
@@ -14,6 +16,8 @@ services:
     replicas: 3
     ports:
       - "9092"
+    networks:
+      - kafka_net 
     environment:
       KAFKA_ADVERTISED_HOST_NAME: 0.0.0.0
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -25,6 +29,8 @@ services:
     container_name: kafkamanager
     restart: on-failure
     # curl localhost:9000/clusters --data "name=fiap&zkHosts=0.0.0.0:2181&kafkaVersion=2.6.1" -X POST
+    networks:
+      - kafka_net     
     ports:
       - 9000:9000
     environment:
@@ -35,7 +41,9 @@ services:
   producer:
     image: tonanuvem/producer_kafka:latest
     container_name: producer
-    network_mode: "host"
+    #network_mode: "host"
+    networks:
+      - kafka_net     
     ports:
       - 80:5001
       - 5001:5001
@@ -53,7 +61,9 @@ services:
   consumer:
     image: tonanuvem/consumer_kafka:latest
     container_name: consumer
-    network_mode: "host"
+    # network_mode: "host"
+    networks:
+      - kafka_net    
     restart: on-failure
     environment:
       - "HOST=0.0.0.0"
@@ -66,3 +76,5 @@ services:
       - kafka
       - producer
 
+networks:
+  kafka_net:
