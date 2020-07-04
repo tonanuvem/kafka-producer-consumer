@@ -1,0 +1,26 @@
+version: '2'
+services:
+  zookeeper:
+    build: ./zookeper-Dockerfile
+    ports:
+      - "2181:2181"
+  kafka:
+    build: ./kafka-Dockerfile
+    ports:
+      - "9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.18
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  kafkamanager:
+    image: kafkamanager/kafka-manager
+    container_name: kafkamanager
+    restart: on-failure
+    ports:
+      - 9000:9000
+    environment:
+      - "ZK_HOSTS=192.168.0.18:2181"
+    depends_on:
+      - kafka
