@@ -20,7 +20,8 @@ services:
     networks:
       - kafka_net 
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 0.0.0.0
+      # KAFKA_ADVERTISED_HOST_NAME: 0.0.0.0
+      KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -35,7 +36,7 @@ services:
     ports:
       - 9000:9000
     environment:
-      - "ZK_HOSTS=0.0.0.0:2181"
+      - "ZK_HOSTS=zookeeper:2181"
     depends_on:
       - kafka
 
@@ -50,8 +51,8 @@ services:
       - 5001:5001
     restart: on-failure
     environment:
-      - "HOST=0.0.0.0"
-      #- "HOST=kafka"
+      #- "HOST=0.0.0.0"
+      - "HOST=kafka"
       - "PORTA=9092"
       - "TOPICO=meu-topico"
       - "SLACK=inserir-webhook"
@@ -67,8 +68,8 @@ services:
       - kafka_net    
     restart: on-failure
     environment:
-      - "HOST=0.0.0.0"
-      #- "HOST=kafka"
+      #- "HOST=0.0.0.0"
+      - "HOST=kafka"
       - "PORTA=9092"
       - "TOPICO=meu-topico"
       - "SLACK=inserir-webhook"
