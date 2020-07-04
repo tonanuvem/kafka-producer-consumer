@@ -85,6 +85,8 @@ services:
   kafkamanager:
     image: kafkamanager/kafka-manager
     container_name: kafkamanager
+    ports:
+      - 9000:9000
     restart: on-failure
     environment:
       - "ZK_HOSTS=kafka1"
