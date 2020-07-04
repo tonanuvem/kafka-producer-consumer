@@ -2,6 +2,8 @@ FROM openjdk:8-jdk-alpine
 
 ENV ZOOKEEPER_VERSION 3.6.1
 
+RUN apk update && apk upgrade && apk add bash gnupg
+
 #Download Zookeeper
 RUN wget -q http://mirror.vorboss.net/apache/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz && \
 wget -q https://www.apache.org/dist/zookeeper/KEYS && \
@@ -30,7 +32,5 @@ EXPOSE 2181 2888 3888
 
 WORKDIR /opt/apache-zookeeper-${ZOOKEEPER_VERSION}
 VOLUME ["/opt/apache-zookeeper-${ZOOKEEPER_VERSION}/conf", "/opt/apache-zookeeper-${ZOOKEEPER_VERSION}/data"]
-
-RUN apk update && apk upgrade && apk add bash
 
 CMD bash /opt/apache-zookeeper-${ZOOKEEPER_VERSION}/bin/zkServer.sh start-foreground
