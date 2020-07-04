@@ -1,7 +1,9 @@
 version: '2'
 services:
   zookeeper:
-    build: ./zookeper-Dockerfile
+    build: 
+      context: .
+      dockerfile: ./zookeper-dockerfile/Dockerfile
     ports:
       - "2181:2181"
   kafka:
