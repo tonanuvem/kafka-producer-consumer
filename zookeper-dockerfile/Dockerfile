@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-ENV ZOOKEEPER_VERSION 3.5.8
+ENV ZOOKEEPER_VERSION 3.6.1
 
 #Download Zookeeper
 RUN wget -q http://mirror.vorboss.net/apache/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}-bin.tar.gz && \
@@ -9,7 +9,7 @@ wget -q https://www.apache.org/dist/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apa
 wget -q https://www.apache.org/dist/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}.tar.gz.sha512
 
 #Verify download
-RUN md5sum -c zookeeper-${ZOOKEEPER_VERSION}.tar.gz.md5 && \
+RUN sha512sum -c zookeeper-${ZOOKEEPER_VERSION}.tar.gz.md5 && \
 gpg --import KEYS && \
 gpg --verify zookeeper-${ZOOKEEPER_VERSION}.tar.gz.asc
 
@@ -33,4 +33,4 @@ VOLUME ["/opt/apache-zookeeper-${ZOOKEEPER_VERSION}/conf", "/opt/apache-zookeepe
 
 RUN apk update && apk upgrade && apk add bash
 
-CMD bash /opt/apache-zookeeper-3.5.8/bin/zkServer.sh start-foreground
+CMD bash /opt/apache-zookeeper-${ZOOKEEPER_VERSION}/bin/zkServer.sh start-foreground
