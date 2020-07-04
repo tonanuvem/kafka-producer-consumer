@@ -22,8 +22,10 @@ services:
         - -c
         - |
           sed -i 's|broker.id=.*|broker.id=1|' /opt/kafka_2.11-0.10.1.0/config/server.properties
-          && sed -i 's|#listeners=PLAINTEXT.*|listeners=PLAINTEXT://:9093|' /opt/kafka_2.11-0.10.1.0/config/server.properties
-          && sh /bin/kafka-server-start.sh /opt/kafka_2.11-0.10.1.0/config/server.properties &
+          cat /opt/kafka_2.11-0.10.1.0/config/server.properties | grep broker.id
+          sed -i 's|#listeners=PLAINTEXT.*|listeners=PLAINTEXT://:9093|' /opt/kafka_2.11-0.10.1.0/config/server.properties
+          cat opt/kafka_2.11-0.10.1.0/config/server.properties | grep listeners=
+          sh /bin/kafka-server-start.sh /opt/kafka_2.11-0.10.1.0/config/server.properties &
           ls
     environment:
       - "ADVERTISED_HOST=0.0.0.0"
