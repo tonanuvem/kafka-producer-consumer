@@ -1,7 +1,7 @@
 version: '3'
 services:
   kafka1:
-    image: wurstmeister/kafka
+    image: wurstmeister/kafka:2.12-2.2.2
     depends_on:
       - zoo1
       - zoo2
@@ -19,7 +19,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT:  zoo1:2181,zoo2:2181,zoo3:2181
 
   kafka2:
-    image: wurstmeister/kafka
+    image: wurstmeister/kafka:2.12-2.2.2
     depends_on:
       - zoo1
       - zoo2
@@ -36,7 +36,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT:  zoo1:2181,zoo2:2181,zoo3:2181
 
   kafka3:
-    image: wurstmeister/kafka
+    image: wurstmeister/kafka:2.12-2.2.2
     depends_on:
       - zoo1
       - zoo2
