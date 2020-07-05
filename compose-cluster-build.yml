@@ -21,11 +21,11 @@ services:
       - "9092:9092"
     networks:
       - kafka_net 
-    healthcheck:
-      test: ["CMD", "$KAFKA_HOME/bin/kafka-topics.sh --describe --zookeeper zookeeper:2181 | wc -l"]
-      interval: 1s
-      timeout: 3s
-      retries: 60
+    #healthcheck:
+      #test: ["CMD", "$KAFKA_HOME/bin/kafka-topics.sh --describe --zookeeper zookeeper:2181 | wc -l"]
+      #interval: 1s
+      #timeout: 3s
+      #retries: 60
     environment:
       # KAFKA_ADVERTISED_HOST_NAME: 0.0.0.0
       KAFKA_ADVERTISED_HOST_NAME: kafka
