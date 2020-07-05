@@ -45,8 +45,7 @@ services:
     environment:
       - "ZK_HOSTS=zookeeper:2181"
     depends_on:
-      kafka:
-        condition: service_healthy
+      - kafka
 
   kafdrop: # https://github.com/obsidiandynamics/kafdrop/blob/master/docker-compose/kafka-kafdrop/docker-compose.yaml
     image: obsidiandynamics/kafdrop
@@ -57,7 +56,7 @@ services:
       KAFKA_BROKERCONNECT: "kafka:9092"
       JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
-       kafka
+       - kafka
  
   producer:
     image: tonanuvem/producer_kafka:latest
@@ -82,7 +81,7 @@ services:
       - "SLACK=inserir-webhook"
       - "CANAL=lab-produtor"
     depends_on:
-      kafka
+      - kafka
 
   consumer:
     image: tonanuvem/consumer_kafka:latest
@@ -104,8 +103,8 @@ services:
       - "SLACK=inserir-webhook"
       - "CANAL=lab-consumidor"
     depends_on:
-      kafka
-      producer
+      - kafka
+      - producer
 
 networks:
   kafka_net:
