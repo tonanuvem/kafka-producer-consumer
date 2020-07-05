@@ -21,6 +21,11 @@ services:
       - "9092:9092"
     networks:
       - kafka_net 
+    healthcheck:
+      test: ["CMD", "ls","$KAFKA_HOME/bin/"]
+      interval: 1s
+      timeout: 3s
+      retries: 60
     environment:
       # KAFKA_ADVERTISED_HOST_NAME: 0.0.0.0
       KAFKA_ADVERTISED_HOST_NAME: kafka
@@ -40,7 +45,7 @@ services:
     environment:
       - "ZK_HOSTS=zookeeper:2181"
     depends_on:
-      - kafka
+      - kafka: service_healthy
 
   kafdrop: # https://github.com/obsidiandynamics/kafdrop/blob/master/docker-compose/kafka-kafdrop/docker-compose.yaml
     image: obsidiandynamics/kafdrop
@@ -51,7 +56,7 @@ services:
       KAFKA_BROKERCONNECT: "kafka:9092"
       JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
-      - "kafka"
+      - kafka: service_healthy
  
   producer:
     image: tonanuvem/producer_kafka:latest
@@ -62,6 +67,11 @@ services:
     ports:
       - 80:5001
       - 5001:5001
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/"]
+      interval: 1s
+      timeout: 3s
+      retries: 60      
     restart: on-failure
     environment:
       #- "HOST=0.0.0.0"
@@ -71,7 +81,7 @@ services:
       - "SLACK=inserir-webhook"
       - "CANAL=lab-produtor"
     depends_on:
-      - kafka
+      - kafka: service_healthy
 
   consumer:
     image: tonanuvem/consumer_kafka:latest
@@ -88,8 +98,8 @@ services:
       - "SLACK=inserir-webhook"
       - "CANAL=lab-consumidor"
     depends_on:
-      - kafka
-      - producer
+      - kafka: service_healthy
+      - producer: service_healthy
 
 networks:
   kafka_net:
