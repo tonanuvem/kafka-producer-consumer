@@ -57,8 +57,7 @@ services:
       KAFKA_BROKERCONNECT: "kafka:9092"
       JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
-       kafka:
-        condition: service_healthy
+       kafka
  
   producer:
     image: tonanuvem/producer_kafka:latest
@@ -83,15 +82,19 @@ services:
       - "SLACK=inserir-webhook"
       - "CANAL=lab-produtor"
     depends_on:
-      kafka:
-        condition: service_healthy
+      kafka
 
   consumer:
     image: tonanuvem/consumer_kafka:latest
     container_name: consumer
     # network_mode: "host"
     networks:
-      - kafka_net    
+      - kafka_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://producer:5001/"]
+      interval: 1s
+      timeout: 3s
+      retries: 60
     restart: on-failure
     environment:
       #- "HOST=0.0.0.0"
@@ -101,10 +104,8 @@ services:
       - "SLACK=inserir-webhook"
       - "CANAL=lab-consumidor"
     depends_on:
-      kafka:
-        condition: service_healthy
-      producer:
-        condition: service_healthy
+      kafka
+      producer
 
 networks:
   kafka_net:
