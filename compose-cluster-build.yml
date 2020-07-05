@@ -20,18 +20,13 @@ services:
     ports:
       - "9092:9092"
     networks:
-      - kafka_net 
-    #healthcheck:
-      #test: ["CMD", "$KAFKA_HOME/bin/kafka-topics.sh --describe --zookeeper zookeeper:2181 | wc -l"]
-      #interval: 1s
-      #timeout: 3s
-      #retries: 60
+      - kafka_net
     environment:
       # KAFKA_ADVERTISED_HOST_NAME: 0.0.0.0
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+    #volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock
       
   kafkamanager:
     image: kafkamanager/kafka-manager
@@ -49,7 +44,19 @@ services:
 
   kafdrop: # https://github.com/obsidiandynamics/kafdrop/blob/master/docker-compose/kafka-kafdrop/docker-compose.yaml
     image: obsidiandynamics/kafdrop
-    restart: "no"
+    container_name: kafdrop
+    command:
+        - /bin/sh
+        - -c
+        - |
+          apk add curl
+          while [[ "$$(curl --connect-timeout 2 -s -o /dev/null -w ''%{http_code}'' http://producer:5001)" != "200" ]]; do 
+            echo . 
+            sleep 5
+          done 
+          echo backend is up
+          /kafdrop.sh
+    restart: on-failure
     ports:
       - "9000:9000"
     environment:
