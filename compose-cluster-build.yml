@@ -96,7 +96,7 @@ services:
         - -c
         - |
           apk add curl
-          while [[ "$$(curl --connect-timeout 2 -s -o /dev/null -w ''%{http_code}'' http://producer:5001)" != "200" ]] do 
+          while [[ "$$(curl --connect-timeout 2 -s -o /dev/null -w ''%{http_code}'' http://producer:5001)" != "200" ]]; do 
             echo . 
             sleep 5
           done 
