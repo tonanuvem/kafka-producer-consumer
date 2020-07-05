@@ -92,7 +92,7 @@ services:
       timeout: 3s
       retries: 60
     command:
-        - bash
+        - /bin/sh
         - -c
         - |
           apk add curl
