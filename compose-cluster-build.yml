@@ -36,12 +36,23 @@ services:
     networks:
       - kafka_net     
     ports:
-      - 9000:9000
+      - 9001:9000
     environment:
       - "ZK_HOSTS=zookeeper:2181"
     depends_on:
       - kafka
 
+  kafdrop: # https://github.com/obsidiandynamics/kafdrop/blob/master/docker-compose/kafka-kafdrop/docker-compose.yaml
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      - KAFKA_BROKERCONNECT: "kafka:9092"
+      - JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on:
+      - "kafka"
+ 
   producer:
     image: tonanuvem/producer_kafka:latest
     container_name: producer
