@@ -42,15 +42,18 @@ services:
     #    retries: 5
     # command: /bin/sh -c 'sleep 10'
     # command: /bin/sh -c "for i in {1..100} ; do if ! nc -z 0.0.0.0:9092 > /dev/null ; then echo waiting on kafka for $i seconds; sleep $i; fi; done; echo Connected!;"
-    #command: >
-    #  /bin/sh -c "
-    #    echo Waiting for kafka service start...;
-    #    while ! nc -z 0.0.0.0 9092;
-    #    do
-    #      sleep 1;
-    #    done;
-    #    echo Connected!;
-    #  "
+    command:
+        - /bin/sh
+        - -c
+        - |
+          apk add curl
+          echo Waiting for kafka service start...;
+          while ! nc -z 0.0.0.0 9092; do
+            echo . 
+            sleep 5
+          done
+          echo Kafka Connected!;
+          python /code/server.py 
 
   consumer:
     image: tonanuvem/consumer_kafka:latest
