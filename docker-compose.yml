@@ -72,7 +72,18 @@ services:
     depends_on:
       - kafka
       - producer
-    # command: /bin/sh -c 'sleep 15s'
+    command:
+        - /bin/sh
+        - -c
+        - |
+          apk add curl
+          while [[ "$$(curl --connect-timeout 2 -s -o /dev/null -w ''%{http_code}'' http://producer:5001)" != "200" ]]; do 
+            echo . 
+            sleep 5
+          done 
+          echo backend is up
+          cd /usr/src/app
+          npm start
       
 #networks:
 #  kafka_net:
