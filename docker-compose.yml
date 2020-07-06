@@ -28,7 +28,7 @@ services:
       - "PORTA=9092"
       - "TOPICO=meu-topico"
       - "SLACK=inserir-webhook"
-      - "CANAL=lab-consumidor"
+      - "CANAL=lab-produtor"
     #networks:
     #  - kafka_net
     depends_on:
@@ -47,6 +47,8 @@ services:
         - -c
         - |
           apk add curl
+          CANAL=lab-produtor
+          echo $CANAL
           echo Waiting for kafka service start...;
           while ! nc -z 0.0.0.0 9092; do
             echo . 
@@ -77,6 +79,8 @@ services:
         - -c
         - |
           apk add curl
+          CANAL=lab-consumidor
+          echo $CANAL
           while [[ "$$(curl --connect-timeout 2 -s -o /dev/null -w ''%{http_code}'' http://0.0.0.0:5001)" != "200" ]]; do 
             echo . 
             sleep 5
