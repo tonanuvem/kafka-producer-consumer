@@ -1,0 +1,102 @@
+version: '3'
+services:
+
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    container_name: zookeeper
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - kafka_net
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka
+    ports:
+      - '9092:9092'
+      - '9093:9093'
+    environment:
+#      - KAFKA_BROKER_ID=1
+#      - KAFKA_LISTENERS=PLAINTEXT://:9092
+#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+    networks:
+      - kafka_net
+    depends_on:
+      - zookeeper
+      
+  producer:
+    image: tonanuvem/producer_kafka:latest
+    container_name: producer
+    #network_mode: "host"
+    ports:
+      - 80:5001
+      - 5001:5001
+    restart: on-failure
+    environment:
+      #- "HOST=0.0.0.0"
+      - "HOST=kafka"
+      - "PORTA=9093"
+      - "TOPICO=meu-topico"
+      - "SLACK=https://hooks.slack.com/services/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"
+      - "CANAL=lab-produtor"
+    networks:
+      - kafka_net
+    depends_on:
+      - kafka
+    command:
+        - /bin/sh
+        - -c
+        - |
+          apk add curl
+          export CANAL=lab-produtor
+          echo $CANAL
+          echo Waiting for kafka service start...;
+          while ! nc -z kafka 9093; do
+            echo . 
+            sleep 5
+          done
+          echo Kafka Connected!;
+          python /code/server.py 
+
+  consumer:
+    image: tonanuvem/consumer_kafka:latest
+    container_name: consumer
+    #network_mode: "host"
+    restart: on-failure
+    environment:
+      #- "HOST=0.0.0.0"
+      - "HOST=kafka"
+      - "PORTA=9093"
+      - "TOPICO=meu-topico"
+      - "SLACK=inserir-webhook"
+      - "CANAL=lab-consumidor"
+    networks:
+      - kafka_net
+    depends_on:
+      - kafka
+      - producer
+    command:
+        - /bin/sh
+        - -c
+        - |
+          apk add curl
+          export CANAL=lab-consumidor
+          echo $CANAL
+          while [[ "$$(curl --connect-timeout 2 -s -o /dev/null -w ''%{http_code}'' http://0.0.0.0:5001)" != "200" ]]; do 
+            echo . 
+            sleep 5
+          done 
+          echo backend is up
+          cd /usr/src/app
+          npm start
+networks:
+  kafka_net:
+    driver: bridge
