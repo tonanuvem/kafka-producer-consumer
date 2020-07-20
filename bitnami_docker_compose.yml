@@ -45,7 +45,7 @@ services:
       - "HOST=kafka"
       - "PORTA=9093"
       - "TOPICO=meu-topico"
-      - "SLACK=https://hooks.slack.com/services/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"
+      - "SLACK=inserir-webhook"
       - "CANAL=lab-produtor"
     networks:
       - kafka_net
