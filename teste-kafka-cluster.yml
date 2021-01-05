@@ -94,3 +94,15 @@ services:
       - kafka1
       - kafka2
       - kafka3      
+
+# https://github.com/obsidiandynamics/kafdrop
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    networks: 
+      - wallet-net
+    depends_on:
+      - kafka
+    ports:
+      - 19000:9000
+    environment:
+      KAFKA_BROKERCONNECT: kafka1:9092
