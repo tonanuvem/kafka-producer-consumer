@@ -61,7 +61,7 @@ services:
       - kafka
   
   consumer:
-    image: usuario/kafka_consumer:latest
+    image: tonanuvem/kafka_consumer:latest
     container_name: consumer
     network_mode: "host"
     environment:
