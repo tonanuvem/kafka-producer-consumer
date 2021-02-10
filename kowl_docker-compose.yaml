@@ -53,7 +53,7 @@ services:
     - ./kowl_config.yaml:/etc/kowl/config.yaml
     entrypoint: ./kowl --config.filepath=/etc/kowl/config.yaml
     depends_on:
-      - kafka
+      - kafka1
 
   producer:
     image: tonanuvem/kafka_producer:latest
@@ -67,7 +67,7 @@ services:
       - "TOPICO=meu-topico"
       #- "WEBHOOK=$WEBHOOK_ARG"
     depends_on:
-      - kafka
+      - kafka1
       
   consumer:
     image: tonanuvem/kafka_consumer:latest
@@ -79,6 +79,6 @@ services:
       #- "WEBHOOK=$WEBHOOK_ARG"
     restart: always
     depends_on:
-      - kafka
+      - kafka1
       - producer
       
