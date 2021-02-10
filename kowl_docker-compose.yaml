@@ -45,3 +45,31 @@ services:
     entrypoint: ./kowl --config.filepath=/etc/kowl/config.yaml
     depends_on:
       - kafka1
+
+  producer:
+    image: tonanuvem/kafka_producer:latest
+    container_name: producer
+    ports:
+      - 5001:5001
+    environment:
+      - "HOST=kafka1"
+      - "PORTA=9092"
+      - "TOPICO=meu-topico"
+      #-WEBHOOK=$WEBHOOK_ARG
+    restart: always
+    depends_on:
+      - kafka
+  
+  consumer:
+    image: usuario/kafka_consumer:latest
+    container_name: consumer
+    network_mode: "host"
+    environment:
+      - "HOST=kafka1"
+      - "PORTA=9092"
+      - "TOPICO=meu-topico"
+      #-WEBHOOK=$WEBHOOK_ARG
+    restart: always
+    depends_on:
+      - kafka
+      - producer
