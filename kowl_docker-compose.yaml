@@ -1,9 +1,9 @@
 # https://github.com/cloudhut/kowl/tree/master/docs/local
 
-version: '2.1'
-
+version: '3'
 services:
-  zoo:
+
+  zoo1:
     image: zookeeper:3.4.9
     hostname: zoo1
     ports:
@@ -16,7 +16,7 @@ services:
       - ./zk-single-kafka-single/zoo1/data:/data
       - ./zk-single-kafka-single/zoo1/datalog:/datalog
 
-  kafka:
+  kafka1:
     image: confluentinc/cp-kafka:5.5.0
     hostname: kafka1
     ports:
@@ -32,16 +32,25 @@ services:
     volumes:
       - ./zk-single-kafka-single/kafka1/data:/var/lib/kafka/data
     depends_on:
-      - zoo
+      - zoo1
+
+  kafka:
+    image: spotify/kafka
+    container_name: kafka
+    network_mode: "host"
+    environment:
+      - "ADVERTISED_HOST=0.0.0.0"
+      - "ADVERTISED_PORT=9092"
 
   kowl:
     image: quay.io/cloudhut/kowl:v1.2.2
     restart: on-failure
     hostname: kowl
-    volumes:
-    - ./kowl_config.yaml:/etc/kowl/config.yaml
+    #network_mode: "host"
     ports:
     - "8080:8080"
+    volumes:
+    - ./kowl_config.yaml:/etc/kowl/config.yaml
     entrypoint: ./kowl --config.filepath=/etc/kowl/config.yaml
     depends_on:
       - kafka
@@ -50,26 +59,26 @@ services:
     image: tonanuvem/kafka_producer:latest
     container_name: producer
     ports:
-      - 5001:5001
+    - "5001:5001"
+    restart: always
     environment:
       - "HOST=kafka1"
-      - "PORTA=9092"
+      - "PORTA=19092"
       - "TOPICO=meu-topico"
-      #-WEBHOOK=$WEBHOOK_ARG
-    restart: always
+      #- "WEBHOOK=$WEBHOOK_ARG"
     depends_on:
       - kafka
-  
+      
   consumer:
     image: tonanuvem/kafka_consumer:latest
     container_name: consumer
-    network_mode: "host"
     environment:
       - "HOST=kafka1"
-      - "PORTA=9092"
+      - "PORTA=19092"
       - "TOPICO=meu-topico"
-      #-WEBHOOK=$WEBHOOK_ARG
+      #- "WEBHOOK=$WEBHOOK_ARG"
     restart: always
     depends_on:
       - kafka
       - producer
+      
