@@ -3,7 +3,7 @@
 version: '2.1'
 
 services:
-  zoo1:
+  zoo:
     image: zookeeper:3.4.9
     hostname: zoo1
     ports:
@@ -16,7 +16,7 @@ services:
       - ./zk-single-kafka-single/zoo1/data:/data
       - ./zk-single-kafka-single/zoo1/datalog:/datalog
 
-  kafka1:
+  kafka:
     image: confluentinc/cp-kafka:5.5.0
     hostname: kafka1
     ports:
@@ -44,7 +44,7 @@ services:
     - "8080:8080"
     entrypoint: ./kowl --config.filepath=/etc/kowl/config.yaml
     depends_on:
-      - kafka1
+      - kafka
 
   producer:
     image: tonanuvem/kafka_producer:latest
